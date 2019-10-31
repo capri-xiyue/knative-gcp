@@ -172,14 +172,6 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:e2b86e41f3d669fc36b50d31d32d22c8ac656c75aa5ea89717ce7177e134ff2a"
-  name = "github.com/golang/glog"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "23def4e6c14b4da8ac2ed8007337bc5eb5007998"
-
-[[projects]]
-  branch = "master"
   digest = "1:b7cb6054d3dff43b38ad2e92492f220f57ae6087ee797dca298139776749ace8"
   name = "github.com/golang/groupcache"
   packages = ["lru"]
@@ -641,9 +633,10 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:cedb53aa4ca6149bd1980811905c413d0d2348f4f8250a309072529d5f586e90"
+  digest = "1:28edd202f6ded3959dd52460724680a1aa5217bb14b15e23dbc768b60a081ae9"
   name = "google.golang.org/api"
   packages = [
+    "container/v1beta1",
     "googleapi",
     "googleapi/internal/uritemplates",
     "googleapi/transport",
@@ -1162,7 +1155,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:2a1af5e20affdf0508f4296328c812f1448bff1c5d7a8d74a2a8a56b5913ff72"
+  digest = "1:53ee6957d8d9f4f64b086e2428cff246fad62f9748f471600beded36a757fb6f"
   name = "knative.dev/pkg"
   packages = [
     "apis",
@@ -1190,6 +1183,7 @@
     "client/injection/kube/informers/apps/v1/deployment/fake",
     "client/injection/kube/informers/batch/v1/job",
     "client/injection/kube/informers/batch/v1/job/fake",
+    "client/injection/kube/informers/core/v1/secret",
     "client/injection/kube/informers/factory",
     "client/injection/kube/informers/factory/fake",
     "codegen/cmd/injection-gen",
@@ -1218,6 +1212,7 @@
     "system",
     "system/testing",
     "test",
+    "test/gke",
     "test/helpers",
     "test/ingress",
     "test/logging",
@@ -1225,12 +1220,15 @@
     "test/monitoring",
     "test/spoof",
     "test/zipkin",
+    "testutils/clustermanager/perf-tests",
+    "testutils/clustermanager/perf-tests/pkg",
     "tracker",
     "version",
     "webhook",
+    "webhook/certificates/resources",
   ]
   pruneopts = "T"
-  revision = "849fcc967b598b47945067cfe0536377bac6bd19"
+  revision = "bbe1367911aa336809d47416b5b331fc764561c9"
 
 [[projects]]
   branch = "master"
@@ -1289,14 +1287,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:8009d9ea7464198279c5c1b1a760365c1f731aa88239632c08929df5b7f323f6"
+  digest = "1:d98cbeb7a88cc866d8353ffec3116baf6397669bde5ceb4caccf540e8cacc496"
   name = "knative.dev/test-infra"
   packages = [
     "scripts",
     "tools/dep-collector",
   ]
   pruneopts = "UT"
-  revision = "12f3c6a839ace07e8171d00e3057c11ed33c465c"
+  revision = "34a629e61afcc53b94725894cdc4caf70b536ee1"
 
 [[projects]]
   digest = "1:8730e0150dfb2b7e173890c8b9868e7a273082ef8e39f4940e3506a481cf895c"
@@ -1421,6 +1419,7 @@
     "knative.dev/pkg/test",
     "knative.dev/pkg/test/helpers",
     "knative.dev/pkg/test/logstream",
+    "knative.dev/pkg/testutils/clustermanager/perf-tests",
     "knative.dev/pkg/tracker",
     "knative.dev/pkg/version",
     "knative.dev/pkg/webhook",
