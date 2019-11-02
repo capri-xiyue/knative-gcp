@@ -99,17 +99,6 @@ metadata:
 
 ---
 
-kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: perf-pubsub
-rules:
-  - apiGroups: [""]
-    resources: ["nodes", "pods"]
-    verbs: ["list"]
-
----
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -120,7 +109,7 @@ subjects:
     namespace: default
 roleRef:
   kind: ClusterRole
-  name: perf-pubsub
+  name: cluster-admin
   apiGroup: rbac.authorization.k8s.io
 
 ---
