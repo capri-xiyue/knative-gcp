@@ -17,12 +17,11 @@ limitations under the License.
 package e2e
 
 import (
+	"cloud.google.com/go/pubsub"
 	"context"
+	"knative.dev/pkg/test/helpers"
 	"os"
 	"testing"
-
-	"cloud.google.com/go/pubsub"
-	"knative.dev/pkg/test/helpers"
 
 	// The following line to load the gcp plugin (only required to authenticate against GKE clusters).
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
@@ -40,6 +39,33 @@ func makeTopicOrDie(t *testing.T) (string, func()) {
 		t.Fatalf("failed to create pubsub client, %s", err.Error())
 	}
 	topicName := helpers.AppendRandomString("ps-e2e-test")
+	topic := client.Topic(topicName)
+	if exists, err := topic.Exists(ctx); err != nil {
+		t.Fatalf("failed to verify topic exists, %s", err)
+	} else if exists {
+		t.Fatalf("topic already exists: %q", topicName)
+	} else {
+		topic, err = client.CreateTopic(ctx, topicName)
+		if err != nil {
+			t.Fatalf("failed to create topic, %s", err)
+		}
+	}
+	return topicName, func() {
+		deleteTopicOrDie(t, topicName)
+	}
+}
+
+func makeTopicOrDieWithTopicName(t *testing.T, topicName string) (string, func()) {
+	ctx := context.Background()
+	// Prow sticks the project in this key
+	project := os.Getenv(ProwProjectKey)
+	if project == "" {
+		t.Fatalf("failed to find %q in envvars", ProwProjectKey)
+	}
+	client, err := pubsub.NewClient(ctx, project)
+	if err != nil {
+		t.Fatalf("failed to create pubsub client, %s", err.Error())
+	}
 	topic := client.Topic(topicName)
 	if exists, err := topic.Exists(ctx); err != nil {
 		t.Fatalf("failed to verify topic exists, %s", err)
