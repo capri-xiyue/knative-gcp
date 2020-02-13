@@ -45,11 +45,31 @@ func TestTopicStatusIsReady(t *testing.T) {
 		wantConditionStatus: corev1.ConditionUnknown,
 		want:                false,
 	}, {
-		name: "mark deployed",
+		name: "mark publisher deployed",
 		s: func() *TopicStatus {
 			s := &TopicStatus{}
 			s.InitializeConditions()
 			s.MarkPublisherDeployed()
+			return s
+		}(),
+		wantConditionStatus: corev1.ConditionUnknown,
+		want:                false,
+	}, {
+		name: "mark publisher not deployed",
+		s: func() *TopicStatus {
+			s := &TopicStatus{}
+			s.InitializeConditions()
+			s.MarkPublisherNotDeployed("test", "PublisherNotDeployed")
+			return s
+		}(),
+		wantConditionStatus: corev1.ConditionFalse,
+		want:                false,
+	}, {
+		name: "the status of publisher is unknown",
+		s: func() *TopicStatus {
+			s := &TopicStatus{}
+			s.InitializeConditions()
+			s.MarkPublisherUnknown("test", "PublisherUnknown")
 			return s
 		}(),
 		wantConditionStatus: corev1.ConditionUnknown,
@@ -133,7 +153,7 @@ func TestTopicStatusGetCondition(t *testing.T) {
 			Status: corev1.ConditionUnknown,
 		},
 	}, {
-		name: "mark deployed",
+		name: "mark publisher deployed",
 		s: func() *TopicStatus {
 			s := &TopicStatus{}
 			s.InitializeConditions()
@@ -144,6 +164,36 @@ func TestTopicStatusGetCondition(t *testing.T) {
 		want: &apis.Condition{
 			Type:   TopicConditionReady,
 			Status: corev1.ConditionUnknown,
+		},
+	}, {
+		name: "mark publisher not deployed",
+		s: func() *TopicStatus {
+			s := &TopicStatus{}
+			s.InitializeConditions()
+			s.MarkPublisherNotDeployed("test", "PublisherNotDeployed")
+			return s
+		}(),
+		condQuery: TopicConditionReady,
+		want: &apis.Condition{
+			Type:    TopicConditionReady,
+			Status:  corev1.ConditionFalse,
+			Reason:  "test",
+			Message: "PublisherNotDeployed",
+		},
+	}, {
+		name: "the status of publisher is unknown",
+		s: func() *TopicStatus {
+			s := &TopicStatus{}
+			s.InitializeConditions()
+			s.MarkPublisherUnknown("test", "PublisherUnknown")
+			return s
+		}(),
+		condQuery: TopicConditionReady,
+		want: &apis.Condition{
+			Type:    TopicConditionReady,
+			Status:  corev1.ConditionUnknown,
+			Reason:  "test",
+			Message: "PublisherUnknown",
 		},
 	}, {
 		name: "mark topic ready",
